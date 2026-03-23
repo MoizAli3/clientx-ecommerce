@@ -27,6 +27,7 @@ export function Navbar() {
   const itemCount = useCart((s) => s.itemCount());
   const searchRef = useRef<HTMLInputElement>(null);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {

@@ -68,11 +68,17 @@ export function Footer() {
             <p className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Payment</p>
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-10 h-6 rounded flex items-center justify-center text-white text-[9px] font-black shrink-0" style={{ background: "linear-gradient(135deg, #EE3124, #c41f13)" }}>Jazz<span className="bg-[#F7941D] ml-0.5 px-0.5 rounded-sm text-[8px]">Cash</span></span>
+                <span className="w-12 h-7 rounded shrink-0 flex items-center justify-center gap-0.5 overflow-hidden" style={{ background: "linear-gradient(135deg, #EE3124, #c41f13)" }}>
+                  <span className="text-white font-black text-[9px] leading-none">Jazz</span>
+                  <span className="bg-[#F7941D] text-white font-bold text-[7px] px-0.5 py-0.5 rounded-sm leading-none">Cash</span>
+                </span>
                 JazzCash
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-10 h-6 rounded flex items-center justify-center text-white text-[11px] font-black shrink-0" style={{ background: "linear-gradient(135deg, #1DBF73, #159956)" }}>ep</span>
+                <span className="w-12 h-7 rounded shrink-0 flex flex-col items-center justify-center overflow-hidden" style={{ background: "linear-gradient(135deg, #1DBF73, #159956)" }}>
+                  <span className="text-white font-black text-[7px] leading-none tracking-wide">easy</span>
+                  <span className="text-white font-black text-[7px] leading-none tracking-wide">paisa</span>
+                </span>
                 EasyPaisa
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">

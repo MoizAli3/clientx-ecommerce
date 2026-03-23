@@ -137,7 +137,7 @@ export function HeroSection() {
               <div className="absolute inset-0 flex items-center justify-center p-6">
                 <div className="relative w-[85%] h-[85%] drop-shadow-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=95"
+                    src="/watch.png"
                     alt="MaxWatch Premium Timepiece"
                     fill
                     className="object-contain"

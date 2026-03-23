@@ -148,19 +148,12 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mx-auto">
 
-              {/* JazzCash — brand: red #EE3124, orange accent #F7941D */}
+              {/* JazzCash */}
               <div className="bg-white rounded-3xl p-6 border border-[#d2d2d7] shadow-sm hover:shadow-lg transition-all duration-300 text-center group">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md" style={{ background: "linear-gradient(145deg, #EE3124 0%, #c41f13 100%)" }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-0.5">
-                    {/* J logo mark */}
-                    <svg viewBox="0 0 48 32" className="w-11 h-7" fill="none">
-                      <text x="4" y="24" fill="white" fontSize="26" fontWeight="900" fontFamily="Arial Black, Arial" letterSpacing="-1">Jazz</text>
-                    </svg>
-                    <div className="bg-[#F7941D] rounded px-2 py-0.5">
-                      <svg viewBox="0 0 48 14" className="w-10 h-3.5" fill="none">
-                        <text x="2" y="11" fill="white" fontSize="12" fontWeight="700" fontFamily="Arial" letterSpacing="0.5">Cash</text>
-                      </svg>
-                    </div>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md overflow-hidden" style={{ background: "linear-gradient(145deg, #EE3124 0%, #c41f13 100%)" }}>
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                    <span className="text-white font-black text-xl leading-none tracking-tight">Jazz</span>
+                    <span className="bg-[#F7941D] text-white font-bold text-[11px] px-2 py-0.5 rounded-sm leading-none">Cash</span>
                   </div>
                 </div>
                 <h3 className="font-bold text-[17px] text-[#1d1d1f] mb-1">JazzCash</h3>
@@ -171,17 +164,12 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              {/* EasyPaisa — brand: green #1DBF73 */}
+              {/* EasyPaisa */}
               <div className="bg-white rounded-3xl p-6 border border-[#d2d2d7] shadow-sm hover:shadow-lg transition-all duration-300 text-center group">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md" style={{ background: "linear-gradient(145deg, #1DBF73 0%, #159956 100%)" }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center">
-                    {/* e lettermark */}
-                    <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-                      <text x="7" y="36" fill="white" fontSize="38" fontWeight="900" fontFamily="Arial Black, Arial" letterSpacing="-2">e</text>
-                      {/* small p */}
-                      <circle cx="34" cy="22" r="7" fill="white" fillOpacity="0.3"/>
-                      <text x="29" y="27" fill="white" fontSize="13" fontWeight="700" fontFamily="Arial">p</text>
-                    </svg>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md overflow-hidden" style={{ background: "linear-gradient(145deg, #1DBF73 0%, #159956 100%)" }}>
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-0.5">
+                    <span className="text-white font-black text-[13px] leading-none tracking-wide">easy</span>
+                    <span className="text-white font-black text-[13px] leading-none tracking-wide">paisa</span>
                   </div>
                 </div>
                 <h3 className="font-bold text-[17px] text-[#1d1d1f] mb-1">EasyPaisa</h3>
@@ -196,12 +184,11 @@ export default async function HomePage() {
               <div className="bg-white rounded-3xl p-6 border border-[#d2d2d7] shadow-sm hover:shadow-lg transition-all duration-300 text-center group">
                 <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-md" style={{ background: "linear-gradient(145deg, #1d1d1f 0%, #3a3a3c 100%)" }}>
                   <div className="w-full h-full flex items-center justify-center">
-                    <svg viewBox="0 0 48 48" className="w-11 h-11" fill="none">
-                      <rect x="6" y="14" width="36" height="22" rx="4" fill="white" fillOpacity="0.15" stroke="white" strokeWidth="1.5" strokeOpacity="0.4"/>
-                      <rect x="10" y="18" width="28" height="6" rx="2" fill="white" fillOpacity="0.5"/>
-                      <circle cx="15" cy="30" r="4" fill="white" fillOpacity="0.7"/>
-                      <circle cx="33" cy="30" r="4" fill="white" fillOpacity="0.7"/>
-                      <rect x="20" y="28" width="8" height="4" rx="1" fill="white" fillOpacity="0.4"/>
+                    <svg viewBox="0 0 48 48" className="w-10 h-10" fill="none">
+                      <rect x="8" y="28" width="32" height="12" rx="3" fill="white" fillOpacity="0.15" stroke="white" strokeWidth="1.5"/>
+                      <path d="M14 28V20a10 10 0 0 1 20 0v8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                      <circle cx="24" cy="34" r="2.5" fill="white" fillOpacity="0.8"/>
+                      <path d="M20 12h8M24 9v6" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5"/>
                     </svg>
                   </div>
                 </div>

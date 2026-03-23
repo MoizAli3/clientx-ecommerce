@@ -12,6 +12,7 @@ import { Footer } from "@/components/layout/Footer";
 import { createOrderAction } from "@/actions/orders";
 import { initiateJazzCashAction, initiateEasyPaisaAction } from "@/actions/payments";
 import { createBrowserClient } from "@supabase/ssr";
+import Image from "next/image";
 
 const PROVINCES = ["Punjab", "Sindh", "KPK", "Balochistan", "Gilgit-Baltistan", "AJK", "Islamabad"];
 type PayMethod = "jazzcash" | "easypaisa" | "cod";
@@ -232,11 +233,10 @@ export default function CheckoutPage() {
                         payMethod === pm.id ? "border-[#1d1d1f] bg-[#f5f5f7]" : "border-[#d2d2d7] hover:border-[#aeaeb2]"
                       }`}
                     >
-                      <span
-                        className="w-10 h-10 rounded-xl text-white text-sm font-bold flex items-center justify-center shrink-0"
-                        style={{ background: pm.color }}
-                      >
-                        {pm.id === "cod" ? "COD" : pm.label.slice(0, 2).toUpperCase()}
+                      <span className="w-10 h-10 rounded-xl shrink-0 bg-white border border-[#e5e5e5] flex items-center justify-center p-1.5">
+                        {pm.id === "jazzcash" && <Image src="/jazzcash.png" alt="JazzCash" width={32} height={32} className="w-full h-full object-contain" />}
+                        {pm.id === "easypaisa" && <Image src="/easypaisa.png" alt="EasyPaisa" width={32} height={32} className="w-full h-full object-contain" />}
+                        {pm.id === "cod" && <span className="text-xl">💵</span>}
                       </span>
                       <div>
                         <p className="text-[15px] font-semibold text-[#1d1d1f]">{pm.label}</p>
