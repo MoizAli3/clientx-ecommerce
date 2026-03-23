@@ -25,7 +25,7 @@ export async function initiateJazzCashAction(orderId: string): Promise<
 > {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { success: false, data: { formUrl: "", payload: {} }, error: "Login karein" };
+  if (!user) return { success: false, data: { formUrl: "", payload: {} }, error: "Please sign in to continue." };
 
   const { data: order } = await supabase
     .from("orders")
@@ -35,7 +35,7 @@ export async function initiateJazzCashAction(orderId: string): Promise<
     .single();
 
   if (!order) {
-    return { success: false, data: { formUrl: "", payload: {} }, error: "Order nahi mila" };
+    return { success: false, data: { formUrl: "", payload: {} }, error: "Order not found." };
   }
 
   const returnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/jazzcash/callback`;
@@ -79,7 +79,7 @@ export async function initiateEasyPaisaAction(orderId: string): Promise<
 > {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { success: false, data: { formUrl: "", payload: {} }, error: "Login karein" };
+  if (!user) return { success: false, data: { formUrl: "", payload: {} }, error: "Please sign in to continue." };
 
   const { data: order } = await supabase
     .from("orders")
@@ -89,7 +89,7 @@ export async function initiateEasyPaisaAction(orderId: string): Promise<
     .single();
 
   if (!order) {
-    return { success: false, data: { formUrl: "", payload: {} }, error: "Order nahi mila" };
+    return { success: false, data: { formUrl: "", payload: {} }, error: "Order not found." };
   }
 
   const returnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/easypaisa/callback`;
@@ -108,9 +108,10 @@ export async function initiateEasyPaisaAction(orderId: string): Promise<
     payload: payload as unknown as Record<string, unknown>,
   });
 
+  // Save orderRefNum so the callback can look up this order
   await adminSupabase
     .from("orders")
-    .update({ status: "payment_pending" })
+    .update({ status: "payment_pending", payment_reference: payload.orderRefNum })
     .eq("id", orderId);
 
   return {

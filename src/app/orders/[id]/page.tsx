@@ -59,8 +59,8 @@ export default async function OrderDetailPage({
                 </h1>
                 <p className="text-[#6e6e73] text-sm mb-3">
                   {payment === "cod"
-                    ? "Aapka order receive ho gaya. Delivery pe cash payment karein."
-                    : "Aapka payment process ho gaya. Order confirm hai."}
+                    ? "Your order has been received. Pay in cash upon delivery."
+                    : "Your payment was processed successfully. Order confirmed."}
                 </p>
                 <div className="inline-flex items-center gap-2 bg-[#f5f5f7] rounded-full px-4 py-2">
                   <span className="text-xs text-[#6e6e73]">Order Number</span>
@@ -175,8 +175,8 @@ export default async function OrderDetailPage({
           {payment === "failed" && (
             <div className="bg-[#ff3b30]/10 border border-[#ff3b30]/30 rounded-2xl p-5 mb-8 text-center">
               <p className="text-2xl mb-2">❌</p>
-              <p className="font-semibold text-[17px] text-[#1d1d1f]">Payment fail ho gayi</p>
-              <p className="text-sm text-[#6e6e73] mt-1">Dobara try karein ya COD select karein</p>
+              <p className="font-semibold text-[17px] text-[#1d1d1f]">Payment Failed</p>
+              <p className="text-sm text-[#6e6e73] mt-1">Please try again or select Cash on Delivery</p>
             </div>
           )}
 

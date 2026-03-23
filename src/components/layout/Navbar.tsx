@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, startTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Search, User, Menu, X } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/actions/auth";
 
 const navLinks = [
   { label: "All Watches", href: "/products" },
@@ -20,10 +21,13 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const itemCount = useCart((s) => s.itemCount());
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -32,8 +36,10 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    setMobileOpen(false);
-    setSearchOpen(false);
+    startTransition(() => {
+      setMobileOpen(false);
+      setSearchOpen(false);
+    });
   }, [pathname]);
 
   useEffect(() => {
@@ -57,6 +63,7 @@ export function Navbar() {
         initial={{ y: -64 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+        suppressHydrationWarning
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
@@ -77,13 +84,17 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-[14px] transition-colors duration-150 whitespace-nowrap",
+                  "relative text-[14px] transition-colors duration-150 whitespace-nowrap group",
                   pathname === link.href
                     ? "text-[#1d1d1f] font-medium"
                     : "text-[#6e6e73] hover:text-[#1d1d1f]"
                 )}
               >
                 {link.label}
+                <span className={cn(
+                  "absolute -bottom-0.5 left-0 h-[1.5px] bg-[#1d1d1f] transition-all duration-200",
+                  pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
+                )} />
               </Link>
             ))}
           </nav>
@@ -105,7 +116,7 @@ export function Navbar() {
                     ref={searchRef}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Watch khojo..."
+                    placeholder="Search watches..."
                     className="w-full px-3 py-1.5 text-sm bg-[#f5f5f7] rounded-full border border-transparent focus:border-[#0071e3] focus:bg-white focus:outline-none transition-all"
                   />
                 </motion.form>
@@ -138,7 +149,7 @@ export function Navbar() {
             <Link href="/cart" className="relative p-2.5 text-[#1d1d1f] hover:bg-[#f5f5f7] rounded-full transition-colors">
               <ShoppingBag size={18} />
               <AnimatePresence>
-                {itemCount > 0 && (
+                {mounted && itemCount > 0 && (
                   <motion.span
                     key="badge"
                     initial={{ scale: 0 }}
@@ -179,7 +190,7 @@ export function Navbar() {
                 <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Watch khojo..."
+                  placeholder="Search watches..."
                   className="w-full pl-9 pr-4 py-2.5 text-sm bg-[#f5f5f7] rounded-full border border-transparent focus:border-[#0071e3] focus:bg-white focus:outline-none"
                 />
               </div>
@@ -200,6 +211,11 @@ export function Navbar() {
               <Link href="/profile" className="px-3 py-3 text-[16px] text-[#1d1d1f] hover:bg-[#f5f5f7] rounded-xl transition-colors">
                 Account
               </Link>
+              <form action={logoutAction}>
+                <button type="submit" className="w-full text-left px-3 py-3 text-[16px] text-[#ff3b30] hover:bg-[#ff3b30]/5 rounded-xl transition-colors">
+                  Sign Out
+                </button>
+              </form>
             </nav>
           </motion.div>
         )}

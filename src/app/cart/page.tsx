@@ -14,7 +14,7 @@ import { FadeIn } from "@/components/ui/motion";
 export default function CartPage() {
   const { items, removeItem, updateQuantity, total } = useCart();
   const subtotal = total();
-  const shipping = subtotal >= 3000 ? 0 : 200;
+  const shipping = subtotal >= 5000 ? 0 : 250;
   const grandTotal = subtotal + shipping;
 
   return (
@@ -34,8 +34,8 @@ export default function CartPage() {
             className="text-center py-24"
           >
             <ShoppingBag size={64} className="text-[#c7c7cc] mx-auto mb-4" />
-            <p className="text-xl font-medium text-[#1d1d1f] mb-2">Bag khali hai</p>
-            <p className="text-[#6e6e73] mb-8">Kuch products add karein</p>
+            <p className="text-xl font-medium text-[#1d1d1f] mb-2">Your bag is empty</p>
+            <p className="text-[#6e6e73] mb-8">Browse our collection and add something you love</p>
             <Link href="/products">
               <Button>Shop Now</Button>
             </Link>
@@ -149,7 +149,7 @@ export default function CartPage() {
                   </div>
                   {shipping > 0 && (
                     <p className="text-xs text-[#6e6e73]">
-                      PKR {formatPKR(3000 - subtotal)} aur add karein free delivery ke liye
+                      Add {formatPKR(5000 - subtotal)} more for free delivery
                     </p>
                   )}
                 </div>

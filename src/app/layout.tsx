@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | MaxWatch",
   },
   description:
-    "Pakistan ka number 1 premium watch store. Luxury, sports, and smart watches. JazzCash aur EasyPaisa se asaan payment.",
+    "Pakistan's #1 premium watch store. Luxury, sports, and smart watches. Easy payment via JazzCash and EasyPaisa.",
   keywords: ["watches", "luxury watches", "pakistan", "jazzcash", "easypaisa", "maxwatch"],
 };
 
@@ -22,8 +22,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={geist.variable}>
-      <body>
+    <html lang="en" className={geist.variable} data-scroll-behavior="smooth">
+      <body suppressHydrationWarning>
         {children}
       </body>
     </html>

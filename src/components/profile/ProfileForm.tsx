@@ -21,7 +21,7 @@ export function ProfileForm({ profile }: { profile: User }) {
         setSuccess(true);
         setEditing(false);
       } else {
-        setError(res.error ?? "Update nahi ho saka");
+        setError(res.error ?? "Could not update profile.");
       }
     });
   };
@@ -78,7 +78,7 @@ export function ProfileForm({ profile }: { profile: User }) {
               disabled
               className="w-full px-3.5 py-2.5 rounded-xl border border-[#d2d2d7] text-sm bg-[#f5f5f7] text-[#6e6e73] cursor-not-allowed"
             />
-            <p className="text-xs text-[#6e6e73] mt-1">Email change nahi ho sakta</p>
+            <p className="text-xs text-[#6e6e73] mt-1">Email cannot be changed</p>
           </div>
           <div className="flex gap-3 pt-1">
             <button

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   const redirectUrl = result.success
     ? `${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderId}?payment=success`
-    : `${process.env.NEXT_PUBLIC_APP_URL}/checkout?payment=failed&order=${orderId}`;
+    : `${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderId}?payment=failed`;
 
   return NextResponse.redirect(redirectUrl, { status: 303 });
 }
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 
   const redirectUrl = result.success
     ? `${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderId}?payment=success`
-    : `${process.env.NEXT_PUBLIC_APP_URL}/checkout?payment=failed&order=${orderId}`;
+    : `${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderId}?payment=failed`;
 
   return NextResponse.redirect(redirectUrl);
 }

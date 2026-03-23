@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { FadeUp, StaggerList } from "@/components/ui/motion";
 import { formatPKR } from "@/lib/utils";
@@ -121,13 +122,13 @@ export default async function AdminDashboard() {
         <div className="bg-white rounded-2xl border border-[#d2d2d7] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#d2d2d7] flex items-center justify-between">
             <h2 className="font-semibold text-[15px] text-[#1d1d1f]">Recent Orders</h2>
-            <a href="/admin/orders" className="text-xs text-[#0071e3] hover:underline">See all →</a>
+            <Link href="/admin/orders" className="text-xs text-[#0071e3] hover:underline">See all →</Link>
           </div>
           <div className="divide-y divide-[#f5f5f7]">
             {recentOrders?.map((order) => {
               const user = order.user as unknown as { full_name: string } | null;
               return (
-                <a
+                <Link
                   key={order.id}
                   href={`/admin/orders/${order.id}`}
                   className="flex items-center justify-between px-5 py-3.5 hover:bg-[#f5f5f7] transition-colors"
@@ -148,7 +149,7 @@ export default async function AdminDashboard() {
                       {order.status}
                     </span>
                   </div>
-                </a>
+                </Link>
               );
             })}
           </div>

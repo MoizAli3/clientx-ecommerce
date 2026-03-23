@@ -40,6 +40,13 @@ export default async function AdminProductsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#f5f5f7]">
+              {(!products || products.length === 0) && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-12 text-center text-sm text-[#6e6e73]">
+                    No products found — add your first product above
+                  </td>
+                </tr>
+              )}
               {products?.map((p) => {
                 const category = p.category as unknown as { name: string } | null;
                 return (

@@ -34,7 +34,7 @@ export async function registerAction(
 
   if (error) {
     if (error.message.includes("already registered")) {
-      return { success: false, data: null, error: "Yeh email pehle se registered hai" };
+      return { success: false, data: null, error: "This email is already registered." };
     }
     return { success: false, data: null, error: error.message };
   }
@@ -62,10 +62,10 @@ export async function loginAction(
 
   if (error) {
     if (error.message.toLowerCase().includes("email not confirmed")) {
-      return { success: false, data: null, error: "Email confirm nahi hui. Apna inbox check karein aur verification link pe click karein." };
+      return { success: false, data: null, error: "Email not confirmed. Please check your inbox and click the verification link." };
     }
     if (error.message.toLowerCase().includes("invalid login") || error.message.toLowerCase().includes("invalid credentials")) {
-      return { success: false, data: null, error: "Email ya password galat hai." };
+      return { success: false, data: null, error: "Incorrect email or password." };
     }
     // Show actual error in dev so it's debuggable
     return { success: false, data: null, error: error.message };

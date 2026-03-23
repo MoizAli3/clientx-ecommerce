@@ -20,7 +20,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCart();
   const subtotal = total();
-  const shipping = subtotal >= 3000 ? 0 : 200;
+  const shipping = subtotal >= 5000 ? 0 : 250;
   const grandTotal = subtotal + shipping;
 
   const [step, setStep] = useState<"address" | "payment">("address");
@@ -71,7 +71,7 @@ export default function CheckoutPage() {
       });
 
       if (!result.success) {
-        showError(result.error ?? "Order place nahi ho saka");
+        showError(result.error ?? "Could not place order. Please try again.");
         return;
       }
 
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      showError(msg || "Kuch masla hua. Dobara try karein.");
+      showError(msg || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -133,8 +133,8 @@ export default function CheckoutPage() {
           <div className="mb-6 bg-[#ff9500]/10 border border-[#ff9500]/30 rounded-2xl px-5 py-4 flex items-center gap-3">
             <span className="text-xl">🔒</span>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#1d1d1f]">Login zaroori hai order karne ke liye</p>
-              <p className="text-xs text-[#6e6e73] mt-0.5">Account nahi? Register karo — bilkul free hai</p>
+              <p className="text-sm font-semibold text-[#1d1d1f]">Sign in required to place an order</p>
+              <p className="text-xs text-[#6e6e73] mt-0.5">Don&apos;t have an account? Register for free</p>
             </div>
             <Link href={`/auth/login?redirect=/checkout`}>
               <Button size="sm" className="shrink-0">Login</Button>
@@ -221,9 +221,9 @@ export default function CheckoutPage() {
                   className="space-y-4"
                 >
                   {[
-                    { id: "jazzcash" as PayMethod, label: "JazzCash", color: "#28a745", desc: "Mobile account ya debit card se pay karo" },
-                    { id: "easypaisa" as PayMethod, label: "EasyPaisa", color: "#7b2d8b", desc: "EasyPaisa mobile account se pay karo" },
-                    { id: "cod" as PayMethod, label: "Cash on Delivery", color: "#1d1d1f", desc: "Delivery pe naqdhi payment karo" },
+                    { id: "jazzcash" as PayMethod, label: "JazzCash", color: "#28a745", desc: "Pay via JazzCash mobile account or debit card" },
+                    { id: "easypaisa" as PayMethod, label: "EasyPaisa", color: "#7b2d8b", desc: "Pay via EasyPaisa mobile account" },
+                    { id: "cod" as PayMethod, label: "Cash on Delivery", color: "#1d1d1f", desc: "Pay in cash when your order arrives" },
                   ].map((pm) => (
                     <button
                       key={pm.id}

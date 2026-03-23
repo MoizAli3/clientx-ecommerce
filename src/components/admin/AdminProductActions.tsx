@@ -15,7 +15,7 @@ export function AdminProductActions({ productId, slug }: { productId: string; sl
     setLoading(true);
     const res = await deleteProductAction(productId);
     if (!res.success) {
-      alert(res.error ?? "Delete nahi ho saka");
+      alert(res.error ?? "Could not delete product.");
     } else {
       router.refresh();
     }

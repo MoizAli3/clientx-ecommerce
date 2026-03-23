@@ -69,8 +69,8 @@ export default async function ProductsPage({
             {products.length === 0 ? (
               <div className="py-24 text-center">
                 <p className="text-5xl mb-4">🔍</p>
-                <p className="text-xl font-medium text-[#1d1d1f] mb-2">Koi watch nahi mili</p>
-                <p className="text-[#6e6e73]">Alag search ya filter try karein</p>
+                <p className="text-xl font-medium text-[#1d1d1f] mb-2">No watches found</p>
+                <p className="text-[#6e6e73]">Try a different search or filter</p>
               </div>
             ) : (
               <>

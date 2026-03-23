@@ -26,8 +26,8 @@ export default async function OrdersPage() {
         {orders.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-5xl mb-4">📦</p>
-            <p className="text-xl font-medium text-[#1d1d1f] mb-2">Koi order nahi</p>
-            <p className="text-[#6e6e73] mb-8">Abhi tak koi order nahi kiya</p>
+            <p className="text-xl font-medium text-[#1d1d1f] mb-2">No orders yet</p>
+            <p className="text-[#6e6e73] mb-8">You haven&apos;t placed any orders yet</p>
             <Link href="/products" className="text-[#0071e3] hover:underline text-[15px]">
               Shop Now →
             </Link>

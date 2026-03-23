@@ -9,7 +9,8 @@ import { OrderStatusBadge } from "@/components/orders/OrderStatusBadge";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { FadeIn } from "@/components/ui/motion";
 import { formatPKR } from "@/lib/utils";
-import { ShoppingBag, Package } from "lucide-react";
+import { ShoppingBag, Package, LogOut } from "lucide-react";
+import { logoutAction } from "@/actions/auth";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -60,12 +61,18 @@ export default async function ProfilePage() {
                 </Link>
                 <Link
                   href="/products"
-                  className="flex items-center gap-3 px-5 py-4 hover:bg-[#f5f5f7] transition-colors"
+                  className="flex items-center gap-3 px-5 py-4 hover:bg-[#f5f5f7] transition-colors border-b border-[#f5f5f7]"
                 >
                   <ShoppingBag size={16} className="text-[#6e6e73]" />
                   <span className="text-sm font-medium text-[#1d1d1f]">Shop Now</span>
                   <span className="ml-auto text-[#aeaeb2]">→</span>
                 </Link>
+                <form action={logoutAction}>
+                  <button type="submit" className="w-full flex items-center gap-3 px-5 py-4 hover:bg-[#ff3b30]/5 transition-colors text-left">
+                    <LogOut size={16} className="text-[#ff3b30]" />
+                    <span className="text-sm font-medium text-[#ff3b30]">Sign Out</span>
+                  </button>
+                </form>
               </div>
             </div>
 
@@ -79,8 +86,8 @@ export default async function ProfilePage() {
                 {orders.length === 0 ? (
                   <div className="py-16 text-center">
                     <p className="text-4xl mb-3">📦</p>
-                    <p className="font-medium text-[#1d1d1f] mb-1">Koi order nahi abhi tak</p>
-                    <p className="text-sm text-[#6e6e73] mb-5">Apni pehli watch order karein!</p>
+                    <p className="font-medium text-[#1d1d1f] mb-1">No orders yet</p>
+                    <p className="text-sm text-[#6e6e73] mb-5">Order your first watch today!</p>
                     <Link
                       href="/products"
                       className="inline-block px-5 py-2 bg-[#0071e3] text-white text-sm font-semibold rounded-full hover:bg-[#0077ed] transition-colors"

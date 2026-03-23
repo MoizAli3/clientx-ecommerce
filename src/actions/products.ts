@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { ProductSchema, CategorySchema } from "@/lib/validations";
-import type { ApiResponse, Product, Category } from "@/types";
+import type { ApiResponse } from "@/types";
 
 // ─── Auth guard helper ─────────────────────────────────────────────────────────
 

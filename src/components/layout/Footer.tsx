@@ -1,22 +1,29 @@
+"use client";
+
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
   return (
-    <footer className="bg-[#0a0a0a] text-white mt-0">
+    <footer className="text-white mt-0" style={{ backgroundColor: '#0a0a0a' }}>
       <div className="max-w-[1200px] mx-auto px-5 py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <p className="text-xl font-semibold mb-2">MaxWatch</p>
             <p className="text-sm text-white/50 leading-relaxed mb-4">
-              Pakistan ka number 1 premium watch store. Authentic timepieces, fast delivery.
+              Pakistan&apos;s #1 premium watch store. Authentic timepieces, fast delivery.
             </p>
             <div className="flex gap-3">
-              {["FB", "IG", "WA"].map((s) => (
-                <div key={s} className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-xs font-semibold text-white/70 hover:bg-white/20 cursor-pointer transition-colors">
-                  {s}
-                </div>
-              ))}
+              <a href="#" aria-label="Facebook" className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} onMouseOver={e => (e.currentTarget.style.backgroundColor='#1877F2')} onMouseOut={e => (e.currentTarget.style.backgroundColor='rgba(255,255,255,0.1)')}>
+                <FaFacebook size={15} color="white" />
+              </a>
+              <a href="#" aria-label="Instagram" className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} onMouseOver={e => (e.currentTarget.style.backgroundColor='#E1306C')} onMouseOut={e => (e.currentTarget.style.backgroundColor='rgba(255,255,255,0.1)')}>
+                <FaInstagram size={15} color="white" />
+              </a>
+              <a href="#" aria-label="WhatsApp" className="w-8 h-8 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} onMouseOver={e => (e.currentTarget.style.backgroundColor='#25D366')} onMouseOut={e => (e.currentTarget.style.backgroundColor='rgba(255,255,255,0.1)')}>
+                <FaWhatsapp size={15} color="white" />
+              </a>
             </div>
           </div>
 

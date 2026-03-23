@@ -41,7 +41,7 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.35 }}
               className="text-lg text-[#6e6e73] mb-8 leading-relaxed max-w-md"
             >
-              Pakistan's finest collection of luxury, sports, and smart watches.
+              Pakistan&apos;s finest collection of luxury, sports, and smart watches.
               Every timepiece is 100% authentic with 1-year warranty.
             </motion.p>
 
@@ -134,13 +134,13 @@ export function HeroSection() {
               <div className="absolute inset-4 rounded-full bg-[#f5f5f7]" />
 
               {/* Watch image */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="relative w-full h-full rounded-full overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 flex items-center justify-center p-6">
+                <div className="relative w-[85%] h-[85%] drop-shadow-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=900&q=95"
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=95"
                     alt="MaxWatch Premium Timepiece"
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     priority
                     sizes="(max-width: 768px) 90vw, 520px"
                   />

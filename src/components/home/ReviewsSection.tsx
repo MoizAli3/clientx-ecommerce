@@ -9,7 +9,7 @@ const REVIEWS = [
     name: "Ahmed Raza",
     city: "Lahore",
     rating: 5,
-    text: "Royal Chronograph Black liya — bilkul amazing quality hai. Packaging bhi bohat professional thi. JazzCash se payment ekdum asaan rahi. Highly recommend!",
+    text: "Got the Royal Chronograph Black — absolutely amazing quality. The packaging was super professional too. Payment via JazzCash was seamless. Highly recommend!",
     watch: "Royal Chronograph Black",
     avatar: "AR",
   },
@@ -18,7 +18,7 @@ const REVIEWS = [
     name: "Fatima Khan",
     city: "Karachi",
     rating: 5,
-    text: "Rose Gold Ladies watch meri shaadi ki anniversary gift thi. Husband ne MaxWatches se order kiya — delivery time pe aayi aur watch ekdum gorgeous hai. Shukriya!",
+    text: "The Rose Gold Ladies watch was my wedding anniversary gift. My husband ordered from MaxWatches — it arrived on time and the watch is absolutely gorgeous. Thank you!",
     watch: "Rose Gold Diamond Ladies",
     avatar: "FK",
   },
@@ -27,7 +27,7 @@ const REVIEWS = [
     name: "Usman Ali",
     city: "Islamabad",
     rating: 5,
-    text: "SmartPro X5 ka heart rate monitor bohat accurate hai. Gym mein use karta hoon roz. Build quality zabardast hai, price bhi reasonable. COD available tha jo bohat acha laga.",
+    text: "The SmartPro X5 heart rate monitor is incredibly accurate. I use it daily at the gym. Build quality is excellent and the price is very reasonable. COD availability was a big plus.",
     watch: "SmartPro X5",
     avatar: "UA",
   },
@@ -36,7 +36,7 @@ const REVIEWS = [
     name: "Sara Malik",
     city: "Faisalabad",
     rating: 5,
-    text: "Classic Minimalist White watch mere office ke liye perfect hai. Lightweight, stylish, aur affordable. Aik ghante mein delivery update aa gayi — customer service top notch!",
+    text: "The Classic Minimalist White watch is perfect for the office. Lightweight, stylish, and affordable. Got a delivery update within an hour — customer service is top notch!",
     watch: "Classic Minimalist White",
     avatar: "SM",
   },
@@ -45,7 +45,7 @@ const REVIEWS = [
     name: "Bilal Hassan",
     city: "Peshawar",
     rating: 5,
-    text: "ProDiver 300M beach pe le gaya — ekdum solid hai. Water resistance claim bilkul sach hai. EasyPaisa se payment smooth rahi. Pura experience 10/10.",
+    text: "Took the ProDiver 300M to the beach — rock solid. The water resistance claim is 100% true. EasyPaisa payment was smooth. The whole experience is 10/10.",
     watch: "ProDiver 300M",
     avatar: "BH",
   },
@@ -54,7 +54,7 @@ const REVIEWS = [
     name: "Zainab Mirza",
     city: "Multan",
     rating: 4,
-    text: "Pearl Ceramic Ladies watch beautiful hai, expected se jaldi deliver hua. Packaging premium thi. Ek baar zaroor order karo yahan se — disappointing nahi karenge.",
+    text: "The Pearl Ceramic Ladies watch is beautiful and arrived faster than expected. Packaging was very premium. Definitely order from here — you won&apos;t be disappointed.",
     watch: "Pearl Ceramic White Ladies",
     avatar: "ZM",
   },
@@ -93,7 +93,7 @@ export function ReviewsSection() {
             Customer Reviews
           </p>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#1d1d1f] mb-3">
-            Customers kya kehte hain
+            What Our Customers Say
           </h2>
           <div className="flex items-center justify-center gap-2 mt-3">
             <div className="flex gap-0.5">
@@ -127,7 +127,7 @@ export function ReviewsSection() {
 
               {/* Review text */}
               <p className="text-[#1d1d1f] text-[15px] leading-relaxed mt-3 mb-4">
-                "{review.text}"
+                &ldquo;{review.text}&rdquo;
               </p>
 
               {/* Watch tag */}

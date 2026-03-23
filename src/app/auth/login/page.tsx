@@ -5,16 +5,23 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { loginAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
+import { createBrowserClient } from "@supabase/ssr";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/";
   const [showPwd, setShowPwd] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(
+    searchParams.get("error") === "oauth"
+      ? `Sign-in failed: ${searchParams.get("msg") ?? "Please try again or use email."}`
+      : ""
+  );
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<"google" | "facebook" | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,12 +33,31 @@ function LoginForm() {
         router.push(redirectTo);
         router.refresh();
       } else {
-        setError(result.error ?? "Login fail ho gayi. Dobara try karein.");
+        setError(result.error ?? "Login failed. Please try again.");
         setLoading(false);
       }
     } catch {
-      setError("Server se connection nahi ho pa raha. Dobara try karein.");
+      setError("Cannot connect to server. Please try again.");
       setLoading(false);
+    }
+  }
+
+  async function handleOAuth(provider: "google" | "facebook") {
+    setOauthLoading(provider);
+    setError("");
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+      },
+    });
+    if (error) {
+      setError(error.message);
+      setOauthLoading(null);
     }
   }
 
@@ -47,17 +73,48 @@ function LoginForm() {
           <Link href="/" className="text-2xl font-semibold text-[#1d1d1f]">
             MaxWatches
           </Link>
-          <p className="text-[#6e6e73] mt-2 text-[15px]">
-            Apne account mein sign in karein
-          </p>
+          <p className="text-[#6e6e73] mt-2 text-[15px]">Sign in to your account</p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-sm border border-[#d2d2d7] p-7">
+          {/* Social login */}
+          <div className="space-y-3 mb-5">
+            <button
+              onClick={() => handleOAuth("google")}
+              disabled={!!oauthLoading}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-[#d2d2d7] bg-white hover:bg-[#f5f5f7] text-[15px] font-medium text-[#1d1d1f] transition-colors disabled:opacity-60"
+            >
+              {oauthLoading === "google" ? (
+                <span className="w-4 h-4 border-2 border-[#1d1d1f] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <FaGoogle size={16} className="text-[#EA4335]" />
+              )}
+              Continue with Google
+            </button>
+
+            <button
+              onClick={() => handleOAuth("facebook")}
+              disabled={!!oauthLoading}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl border border-[#d2d2d7] bg-white hover:bg-[#f5f5f7] text-[15px] font-medium text-[#1d1d1f] transition-colors disabled:opacity-60"
+            >
+              {oauthLoading === "facebook" ? (
+                <span className="w-4 h-4 border-2 border-[#1d1d1f] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <FaFacebook size={16} className="text-[#1877F2]" />
+              )}
+              Continue with Facebook
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex-1 h-px bg-[#d2d2d7]" />
+            <span className="text-xs text-[#aeaeb2] font-medium">or</span>
+            <div className="flex-1 h-px bg-[#d2d2d7]" />
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1d1d1f] mb-1.5">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-[#1d1d1f] mb-1.5">Email</label>
               <input
                 name="email"
                 type="email"
@@ -69,9 +126,7 @@ function LoginForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1d1d1f] mb-1.5">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-[#1d1d1f] mb-1.5">Password</label>
               <div className="relative">
                 <input
                   name="password"
@@ -109,12 +164,9 @@ function LoginForm() {
         </div>
 
         <p className="text-center text-sm text-[#6e6e73] mt-5">
-          Account nahi hai?{" "}
-          <Link
-            href="/auth/register"
-            className="text-[#0071e3] hover:underline font-medium"
-          >
-            Register karo
+          Don&apos;t have an account?{" "}
+          <Link href="/auth/register" className="text-[#0071e3] hover:underline font-medium">
+            Create one
           </Link>
         </p>
       </motion.div>

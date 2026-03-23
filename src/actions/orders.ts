@@ -16,7 +16,7 @@ export async function createOrderAction(
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Login karein pehle" };
+    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Please sign in to place an order." };
   }
 
   const parsed = CreateOrderSchema.safeParse(payload);
@@ -38,7 +38,7 @@ export async function createOrderAction(
     .in("id", productIds);
 
   if (prodError || !products?.length) {
-    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Products nahi mile" };
+    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Could not load product details." };
   }
 
   // Validate stock + build line items
@@ -51,14 +51,14 @@ export async function createOrderAction(
       return {
         success: false,
         data: { orderId: "", orderNumber: "" },
-        error: "Kuch products available nahi hain",
+        error: "One or more products are no longer available.",
       };
     }
     if (product.stock < item.quantity) {
       return {
         success: false,
         data: { orderId: "", orderNumber: "" },
-        error: `Stock nahi hai (${item.quantity} requested, ${product.stock} available)`,
+        error: `Insufficient stock (${item.quantity} requested, ${product.stock} available)`,
       };
     }
     const unitPrice = product.sale_price ?? product.price;
@@ -92,7 +92,7 @@ export async function createOrderAction(
     .single();
 
   if (orderError || !order) {
-    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Order create nahi ho saka" };
+    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Could not create order. Please try again." };
   }
 
   // Insert order items
@@ -115,7 +115,7 @@ export async function createOrderAction(
   if (itemsError) {
     // Rollback order
     await adminSupabase.from("orders").delete().eq("id", order.id);
-    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Order items save nahi ho sakin" };
+    return { success: false, data: { orderId: "", orderNumber: "" }, error: "Could not save order items. Please try again." };
   }
 
   // Decrement stock
@@ -129,12 +129,6 @@ export async function createOrderAction(
 
   // Send confirmation email (non-blocking)
   try {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
     const fullOrder = {
       ...order,
       items: orderItems.map((oi, i) => ({
@@ -160,7 +154,7 @@ export async function getOrderAction(orderId: string): Promise<ApiResponse<Order
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, data: null, error: "Login karein pehle" };
+    return { success: false, data: null, error: "Please sign in to continue." };
   }
 
   const { data, error } = await supabase
@@ -170,7 +164,7 @@ export async function getOrderAction(orderId: string): Promise<ApiResponse<Order
     .single();
 
   if (error || !data) {
-    return { success: false, data: null, error: "Order nahi mila" };
+    return { success: false, data: null, error: "Order not found." };
   }
 
   // RLS handles auth, but double-check ownership for non-admins
@@ -222,7 +216,7 @@ export async function updateOrderStatusAction(
     .eq("id", order_id);
 
   if (error) {
-    return { success: false, data: null, error: "Status update nahi ho saka" };
+    return { success: false, data: null, error: "Could not update order status." };
   }
 
   return { success: true, data: null };

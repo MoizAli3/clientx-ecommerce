@@ -48,6 +48,7 @@ export function FadeUp({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ delay }}
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>
@@ -70,6 +71,7 @@ export function FadeIn({
       animate="visible"
       transition={{ delay }}
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>
@@ -87,9 +89,9 @@ export function StaggerList({
     <motion.div
       variants={stagger}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-40px" }}
+      animate="visible"
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>

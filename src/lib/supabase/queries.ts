@@ -29,12 +29,20 @@ export async function getProducts(opts?: {
   const to = from + (opts?.limit ?? 20) - 1;
 
   if (opts?.categorySlug) {
-    // Use !inner join so PostgREST can filter directly on categories.slug
+    // Resolve slug → id first, then filter by category_id (reliable)
+    const { data: cat } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("slug", opts.categorySlug)
+      .single();
+
+    if (!cat) return { products: [], count: 0 };
+
     let q = supabase
       .from("products")
-      .select("*, category:categories!inner(*)", { count: "exact" })
+      .select("*, category:categories(*)", { count: "exact" })
       .eq("is_active", true)
-      .eq("categories.slug", opts.categorySlug);
+      .eq("category_id", cat.id);
 
     if (opts.search) q = q.ilike("name", `%${opts.search}%`);
 

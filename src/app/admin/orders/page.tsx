@@ -38,6 +38,13 @@ export default async function AdminOrdersPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-[#f5f5f7]">
+              {orders.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="px-4 py-12 text-center text-sm text-[#6e6e73]">
+                    No orders found
+                  </td>
+                </tr>
+              )}
               {orders.map((order) => {
                 const user = (order as unknown as { user?: { full_name: string; phone: string } }).user;
                 return (

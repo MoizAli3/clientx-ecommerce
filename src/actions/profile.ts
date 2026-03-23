@@ -11,7 +11,7 @@ export async function updateProfileAction(
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, data: null, error: "Login karein pehle" };
+    return { success: false, data: null, error: "Please sign in to continue." };
   }
 
   const raw = {
@@ -30,7 +30,7 @@ export async function updateProfileAction(
     .eq("id", user.id);
 
   if (error) {
-    return { success: false, data: null, error: "Profile update nahi ho saki" };
+    return { success: false, data: null, error: "Could not update profile. Please try again." };
   }
 
   return { success: true, data: null };
