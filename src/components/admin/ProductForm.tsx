@@ -39,18 +39,26 @@ export function ProductForm({
     if (!files.length) return;
     setUploading(true);
     setError("");
-    for (const file of files) {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadProductImageAction(fd);
-      if (res.success) {
-        setImages((prev) => [...prev, res.data.url]);
-      } else {
-        setError(res.error ?? "Image upload failed");
-      }
-    }
-    setUploading(false);
     e.target.value = "";
+
+    // Upload all files in parallel
+    const results = await Promise.all(
+      files.map((file) => {
+        const fd = new FormData();
+        fd.append("file", file);
+        return uploadProductImageAction(fd);
+      })
+    );
+
+    const urls: string[] = [];
+    const errors: string[] = [];
+    for (const res of results) {
+      if (res.success) urls.push(res.data.url);
+      else errors.push(res.error ?? "Upload failed");
+    }
+    if (urls.length) setImages((prev) => [...prev, ...urls]);
+    if (errors.length) setError(errors[0]);
+    setUploading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
