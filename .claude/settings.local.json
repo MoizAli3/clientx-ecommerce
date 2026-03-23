@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --yes)",
+      "Bash(npx create-next-app@latest clientx --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --yes)",
+      "Bash(cp -r clientx/. .)",
+      "Bash(rm -rf clientx)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init --yes --base-color slate --css-variables)",
+      "Bash(npx shadcn@latest init --yes)",
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)",
+      "Bash(find E:/Cluade/Ecommerce/src -name middleware* -o -name proxy*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd //c \"taskkill /PID 2356 /F\" 2>&1)",
+      "Bash(cmd //c \"netstat -ano | findstr :3000\")",
+      "Bash(node -e \"const p = require\\(''./node_modules/@supabase/supabase-js/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"const p = require\\(''./node_modules/@supabase/ssr/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \":*)",
+      "Bash(mkdir -p \"E:/Cluade/Ecommerce/.claude/commands\" \"E:/Cluade/Ecommerce/.claude/agents\")",
+      "Bash(cp \"C:/Users/moizk/.claude/commands/\"*.md \"E:/Cluade/Ecommerce/.claude/commands/\")",
+      "Bash(cp \"C:/Users/moizk/.claude/agents/\"*.md \"E:/Cluade/Ecommerce/.claude/agents/\")"
+    ]
+  }
+}
