@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { FadeUp, StaggerList } from "@/components/ui/motion";
 import { formatPKR } from "@/lib/utils";
 import { ShoppingCart, Package, Users, TrendingUp } from "lucide-react";
+import { AdminCharts } from "@/components/admin/AdminCharts";
+import type { RevenuePoint, StatusPoint } from "@/components/admin/AdminCharts";
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -22,7 +24,53 @@ export default async function AdminDashboard() {
     { label: "Revenue", value: formatPKR(revenue), icon: TrendingUp, color: "#ff3b30" },
   ];
 
-  // Recent orders
+  // ─── Chart Data ─────────────────────────────────────────────────────────────
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+  sevenDaysAgo.setHours(0, 0, 0, 0);
+
+  const [chartOrdersResult, allOrdersStatusResult] = await Promise.all([
+    supabase
+      .from("orders")
+      .select("created_at, total, status")
+      .gte("created_at", sevenDaysAgo.toISOString()),
+    supabase.from("orders").select("status"),
+  ]);
+
+  // Build revenue by day (last 7 days)
+  const revenueByDay: Record<string, number> = {};
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toLocaleDateString("en-PK", { month: "short", day: "numeric" });
+    revenueByDay[key] = 0;
+  }
+  chartOrdersResult.data?.forEach((o) => {
+    if (["cancelled", "payment_failed", "refunded"].includes(o.status)) return;
+    const key = new Date(o.created_at).toLocaleDateString("en-PK", {
+      month: "short",
+      day: "numeric",
+    });
+    if (key in revenueByDay) revenueByDay[key] += Number(o.total);
+  });
+  const revenueData: RevenuePoint[] = Object.entries(revenueByDay).map(([date, rev]) => ({
+    date,
+    revenue: rev,
+  }));
+
+  // Build orders by status count
+  const statusMap: Record<string, number> = {};
+  allOrdersStatusResult.data?.forEach((o) => {
+    statusMap[o.status] = (statusMap[o.status] ?? 0) + 1;
+  });
+  const statusData: StatusPoint[] = Object.entries(statusMap).map(([status, count]) => ({
+    status,
+    count,
+  }));
+
+  // ─── Recent Orders ───────────────────────────────────────────────────────────
+
   const { data: recentOrders } = await supabase
     .from("orders")
     .select("id, order_number, total, status, created_at, user:profiles(full_name)")
@@ -30,8 +78,8 @@ export default async function AdminDashboard() {
     .limit(8);
 
   const statusColors: Record<string, string> = {
-    pending: "#f59e0b", confirmed: "#16a34a", delivered: "#16a34a",
-    payment_failed: "#ff3b30", cancelled: "#ff3b30", shipped: "#0071e3",
+    pending: "#f59e0b", confirmed: "#16a34a", delivered: "#34c759",
+    payment_failed: "#ff3b30", cancelled: "#ff3b30", shipped: "#6366f1",
     processing: "#0071e3", payment_pending: "#f59e0b", refunded: "#6e6e73",
   };
 
@@ -63,7 +111,12 @@ export default async function AdminDashboard() {
         })}
       </StaggerList>
 
-      {/* Recent orders */}
+      {/* Charts */}
+      <FadeUp>
+        <AdminCharts revenueData={revenueData} statusData={statusData} />
+      </FadeUp>
+
+      {/* Recent Orders */}
       <FadeUp>
         <div className="bg-white rounded-2xl border border-[#d2d2d7] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#d2d2d7] flex items-center justify-between">
