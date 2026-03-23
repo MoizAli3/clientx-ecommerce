@@ -20,7 +20,7 @@ export default async function AdminOrdersPage({
   });
 
   return (
-    <div className="max-w-5xl">
+    <div className="w-full">
       <FadeUp>
         <h1 className="text-2xl font-semibold text-[#1d1d1f] mb-6">Orders ({count})</h1>
       </FadeUp>

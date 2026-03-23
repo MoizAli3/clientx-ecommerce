@@ -27,6 +27,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -41,7 +42,7 @@ export default function CheckoutPage() {
     city: "", province: "Punjab", postal_code: "",
   });
 
-  if (items.length === 0) {
+  if (items.length === 0 && !orderPlaced) {
     router.replace("/cart");
     return null;
   }
@@ -75,6 +76,7 @@ export default function CheckoutPage() {
       }
 
       const { orderId } = result.data;
+      setOrderPlaced(true);
       clearCart();
 
       if (payMethod === "jazzcash") {
@@ -114,8 +116,8 @@ export default function CheckoutPage() {
         router.push(`/orders/${orderId}?payment=cod`);
       }
     } catch (err) {
-      showError("Kuch masla hua. Dobara try karein.");
-      console.error(err);
+      const msg = err instanceof Error ? err.message : String(err);
+      showError(msg || "Kuch masla hua. Dobara try karein.");
     } finally {
       setLoading(false);
     }

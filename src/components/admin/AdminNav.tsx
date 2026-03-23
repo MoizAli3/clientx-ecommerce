@@ -18,7 +18,7 @@ export function AdminNav() {
   return (
     <aside className="fixed left-0 top-0 h-full w-56 bg-white border-r border-[#d2d2d7] hidden md:flex flex-col z-40">
       <div className="px-5 py-5 border-b border-[#d2d2d7]">
-        <Link href="/" className="font-semibold text-[17px] text-[#1d1d1f]">ClientX</Link>
+        <Link href="/" className="font-semibold text-[17px] text-[#1d1d1f]">MaxWatches</Link>
         <p className="text-xs text-[#6e6e73] mt-0.5">Admin Panel</p>
       </div>
 

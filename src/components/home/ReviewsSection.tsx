@@ -18,7 +18,7 @@ const REVIEWS = [
     name: "Fatima Khan",
     city: "Karachi",
     rating: 5,
-    text: "Rose Gold Ladies watch meri shaadi ki anniversary gift thi. Husband ne ClientX se order kiya — delivery time pe aayi aur watch ekdum gorgeous hai. Shukriya!",
+    text: "Rose Gold Ladies watch meri shaadi ki anniversary gift thi. Husband ne MaxWatches se order kiya — delivery time pe aayi aur watch ekdum gorgeous hai. Shukriya!",
     watch: "Rose Gold Diamond Ladies",
     avatar: "FK",
   },

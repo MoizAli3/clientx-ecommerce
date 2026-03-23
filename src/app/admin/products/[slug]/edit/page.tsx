@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { getCategories } from "@/lib/supabase/queries";
 import { ProductForm } from "@/components/admin/ProductForm";
 import Link from "next/link";
@@ -12,10 +12,9 @@ export default async function EditProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
-
+  const adminSupabase = await createAdminClient();
   const [{ data: product }, categories] = await Promise.all([
-    supabase
+    adminSupabase
       .from("products")
       .select("*, category:categories(*)")
       .eq("slug", slug)

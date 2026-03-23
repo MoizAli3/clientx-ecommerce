@@ -1,10 +1,11 @@
 import { Resend } from "resend";
 import type { Order } from "@/types";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.RESEND_FROM_EMAIL || "noreply@clientx.pk";
+const FROM = process.env.RESEND_FROM_EMAIL || "noreply@maxwatches.pk";
 
 export async function sendOrderConfirmationEmail(order: Order, email: string) {
+  if (!process.env.RESEND_API_KEY) return;
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const itemsHtml = order.items
     .map(
       (item) =>

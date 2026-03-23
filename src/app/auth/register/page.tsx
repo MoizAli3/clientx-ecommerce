@@ -66,7 +66,7 @@ export default function RegisterPage() {
       >
         <div className="text-center mb-8">
           <Link href="/" className="text-2xl font-semibold text-[#1d1d1f]">
-            ClientX
+            MaxWatches
           </Link>
           <p className="text-[#6e6e73] mt-2 text-[15px]">Naya account banao</p>
         </div>

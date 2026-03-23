@@ -11,10 +11,14 @@ export function AdminProductActions({ productId, slug }: { productId: string; sl
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
-    if (!confirm("Is product ko disable karna chahte ho?")) return;
+    if (!confirm("Is product ko delete karna chahte ho?")) return;
     setLoading(true);
-    await deleteProductAction(productId);
-    router.refresh();
+    const res = await deleteProductAction(productId);
+    if (!res.success) {
+      alert(res.error ?? "Delete nahi ho saka");
+    } else {
+      router.refresh();
+    }
     setLoading(false);
   };
 

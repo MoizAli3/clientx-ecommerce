@@ -10,16 +10,17 @@ export default async function AdminProductsPage() {
   const { data: products } = await supabase
     .from("products")
     .select("*, category:categories(name)")
+    .eq("is_active", true)
     .order("created_at", { ascending: false });
 
   return (
-    <div className="max-w-5xl">
+    <div className="w-full">
       <FadeUp>
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-semibold text-[#1d1d1f]">Products ({products?.length ?? 0})</h1>
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#1d1d1f] text-white text-sm font-medium rounded-full hover:bg-[#3d3d3f] transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1d1d1f] text-white text-sm font-semibold rounded-full hover:bg-[#3a3a3c] transition-colors shadow-sm"
           >
             <Plus size={15} /> Add Product
           </Link>
@@ -60,8 +61,10 @@ export default async function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        p.is_active ? "bg-[#34c759]/15 text-[#34c759]" : "bg-[#ff3b30]/15 text-[#ff3b30]"
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                        p.is_active
+                          ? "bg-[#34c759] text-white"
+                          : "bg-[#ff3b30] text-white"
                       }`}>
                         {p.is_active ? "Active" : "Inactive"}
                       </span>

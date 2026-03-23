@@ -251,14 +251,26 @@ export function ProductForm({
             </div>
           ))}
           <label
-            className={`w-20 h-20 border-2 border-dashed border-[#d2d2d7] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#0071e3] transition-colors ${
-              uploading ? "opacity-50 pointer-events-none" : ""
+            className={`w-20 h-20 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors ${
+              uploading
+                ? "border-[#0071e3] bg-[#0071e3]/5 pointer-events-none"
+                : "border-[#d2d2d7] hover:border-[#0071e3]"
             }`}
           >
-            <span className="text-2xl text-[#6e6e73] leading-none">+</span>
-            <span className="text-[10px] text-[#6e6e73] mt-1">
-              {uploading ? "Uploading..." : "Add Image"}
-            </span>
+            {uploading ? (
+              <>
+                <svg className="animate-spin w-6 h-6 text-[#0071e3]" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                <span className="text-[10px] text-[#0071e3] mt-1 font-medium">Uploading...</span>
+              </>
+            ) : (
+              <>
+                <span className="text-2xl text-[#6e6e73] leading-none">+</span>
+                <span className="text-[10px] text-[#6e6e73] mt-1">Add Image</span>
+              </>
+            )}
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
@@ -272,17 +284,17 @@ export function ProductForm({
       </div>
 
       {/* Submit */}
-      <div className="flex items-center gap-3 pt-2 border-t border-[#f5f5f7]">
+      <div className="flex items-center gap-3 pt-4 border-t border-[#f5f5f7]">
         <button
           type="submit"
           disabled={isPending || uploading}
-          className="px-6 py-2.5 bg-[#1d1d1f] text-white text-sm font-medium rounded-full hover:bg-[#3d3d3f] transition-colors disabled:opacity-50"
+          className="px-6 py-2.5 bg-[#0071e3] text-white text-sm font-semibold rounded-full hover:bg-[#0077ed] active:bg-[#006edb] transition-colors disabled:opacity-50 shadow-sm"
         >
           {isPending ? "Saving..." : product ? "Update Product" : "Create Product"}
         </button>
         <a
           href="/admin/products"
-          className="text-sm text-[#6e6e73] hover:text-[#1d1d1f] transition-colors"
+          className="px-5 py-2.5 text-sm font-medium text-[#1d1d1f] bg-[#f5f5f7] rounded-full hover:bg-[#e8e8ed] transition-colors"
         >
           Cancel
         </a>

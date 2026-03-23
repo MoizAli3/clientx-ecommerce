@@ -61,15 +61,15 @@ export function Footer() {
             <p className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Payment</p>
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-8 h-5 bg-[#28a745] rounded text-white text-[10px] font-bold flex items-center justify-center">JC</span>
+                <span className="w-10 h-6 rounded flex items-center justify-center text-white text-[9px] font-black shrink-0" style={{ background: "linear-gradient(135deg, #EE3124, #c41f13)" }}>Jazz<span className="bg-[#F7941D] ml-0.5 px-0.5 rounded-sm text-[8px]">Cash</span></span>
                 JazzCash
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-8 h-5 bg-[#7b2d8b] rounded text-white text-[10px] font-bold flex items-center justify-center">EP</span>
+                <span className="w-10 h-6 rounded flex items-center justify-center text-white text-[11px] font-black shrink-0" style={{ background: "linear-gradient(135deg, #1DBF73, #159956)" }}>ep</span>
                 EasyPaisa
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-8 h-5 bg-white/20 rounded text-white text-[10px] font-bold flex items-center justify-center">COD</span>
+                <span className="w-10 h-6 bg-white/20 rounded text-white text-[9px] font-bold flex items-center justify-center shrink-0">COD</span>
                 Cash on Delivery
               </div>
             </div>

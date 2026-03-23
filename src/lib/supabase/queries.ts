@@ -31,7 +31,17 @@ export async function getProducts(opts?: {
     .eq("is_active", true);
 
   if (opts?.categorySlug) {
-    query = query.eq("category.slug", opts.categorySlug);
+    // Resolve slug → id first; PostgREST can't filter on aliased join columns
+    const { data: cat } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("slug", opts.categorySlug)
+      .single();
+    if (cat) {
+      query = query.eq("category_id", cat.id);
+    } else {
+      return { products: [], count: 0 };
+    }
   }
   if (opts?.search) {
     query = query.ilike("name", `%${opts.search}%`);

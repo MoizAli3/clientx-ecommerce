@@ -84,11 +84,11 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="max-w-5xl">
+    <div className="w-full">
       <FadeUp>
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-[#1d1d1f]">Dashboard</h1>
-          <p className="text-sm text-[#6e6e73] mt-0.5">ClientX ka overview</p>
+          <p className="text-sm text-[#6e6e73] mt-0.5">MaxWatches ka overview</p>
         </div>
       </FadeUp>
 
