@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
@@ -68,16 +69,14 @@ export function Footer() {
             <p className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Payment</p>
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-12 h-7 rounded shrink-0 flex items-center justify-center gap-0.5 overflow-hidden" style={{ background: "linear-gradient(135deg, #EE3124, #c41f13)" }}>
-                  <span className="text-white font-black text-[9px] leading-none">Jazz</span>
-                  <span className="bg-[#F7941D] text-white font-bold text-[7px] px-0.5 py-0.5 rounded-sm leading-none">Cash</span>
+                <span className="w-12 h-7 rounded shrink-0 bg-white flex items-center justify-center p-1">
+                  <Image src="/jazzcash.png" alt="JazzCash" width={40} height={24} className="w-full h-full object-contain" />
                 </span>
                 JazzCash
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-12 h-7 rounded shrink-0 flex flex-col items-center justify-center overflow-hidden" style={{ background: "linear-gradient(135deg, #1DBF73, #159956)" }}>
-                  <span className="text-white font-black text-[7px] leading-none tracking-wide">easy</span>
-                  <span className="text-white font-black text-[7px] leading-none tracking-wide">paisa</span>
+                <span className="w-12 h-7 rounded shrink-0 bg-white flex items-center justify-center p-1">
+                  <Image src="/easypaisa.png" alt="EasyPaisa" width={40} height={24} className="w-full h-full object-contain" />
                 </span>
                 EasyPaisa
               </div>

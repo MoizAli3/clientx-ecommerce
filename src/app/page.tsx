@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getProducts, getCategories } from "@/lib/supabase/queries";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -150,11 +151,8 @@ export default async function HomePage() {
 
               {/* JazzCash */}
               <div className="bg-white rounded-3xl p-6 border border-[#d2d2d7] shadow-sm hover:shadow-lg transition-all duration-300 text-center group">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md overflow-hidden" style={{ background: "linear-gradient(145deg, #EE3124 0%, #c41f13 100%)" }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-                    <span className="text-white font-black text-xl leading-none tracking-tight">Jazz</span>
-                    <span className="bg-[#F7941D] text-white font-bold text-[11px] px-2 py-0.5 rounded-sm leading-none">Cash</span>
-                  </div>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md flex items-center justify-center p-1.5 bg-white border border-[#f0f0f0]">
+                  <Image src="/jazzcash.png" alt="JazzCash" width={68} height={68} className="w-full h-full object-contain" />
                 </div>
                 <h3 className="font-bold text-[17px] text-[#1d1d1f] mb-1">JazzCash</h3>
                 <p className="text-sm text-[#6e6e73] leading-snug">Instant payment via mobile wallet</p>
@@ -166,11 +164,8 @@ export default async function HomePage() {
 
               {/* EasyPaisa */}
               <div className="bg-white rounded-3xl p-6 border border-[#d2d2d7] shadow-sm hover:shadow-lg transition-all duration-300 text-center group">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md overflow-hidden" style={{ background: "linear-gradient(145deg, #1DBF73 0%, #159956 100%)" }}>
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-0.5">
-                    <span className="text-white font-black text-[13px] leading-none tracking-wide">easy</span>
-                    <span className="text-white font-black text-[13px] leading-none tracking-wide">paisa</span>
-                  </div>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-md flex items-center justify-center p-1.5 bg-white border border-[#f0f0f0]">
+                  <Image src="/easypaisa.png" alt="EasyPaisa" width={68} height={68} className="w-full h-full object-contain" />
                 </div>
                 <h3 className="font-bold text-[17px] text-[#1d1d1f] mb-1">EasyPaisa</h3>
                 <p className="text-sm text-[#6e6e73] leading-snug">Secure payment via Telenor wallet</p>

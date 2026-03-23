@@ -50,25 +50,27 @@ body {
 }
 
 /* ─── Typography reset ──────────────────────────────────────── */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  color: #1d1d1f;
-}
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: #1d1d1f;
+  }
 
-p {
-  line-height: 1.6;
-}
+  p {
+    line-height: 1.6;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 }
 
 img {
