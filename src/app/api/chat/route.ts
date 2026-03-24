@@ -404,7 +404,7 @@ export async function POST(req: NextRequest) {
 
     for (let i = 0; i < 6; i++) {
       const response = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
+        model: "llama-3.1-8b-instant",
         max_tokens: 1024,
         temperature: 0.6,
         messages: currentMessages,
@@ -450,6 +450,11 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[chat]", msg);
-    return NextResponse.json({ error: msg || "Something went wrong. Please try again." }, { status: 500 });
+    // Surface rate limit errors to the user; hide other internal errors
+    const isRateLimit = msg.includes("rate_limit") || msg.includes("429");
+    return NextResponse.json(
+      { error: isRateLimit ? "I'm a bit busy right now. Please try again in a few minutes." : "Something went wrong. Please try again." },
+      { status: 500 }
+    );
   }
 }
