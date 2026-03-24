@@ -448,7 +448,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ message: finalText, products: shownProducts, cartActions, orderResult });
   } catch (err) {
-    console.error("[chat]", err);
-    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[chat]", msg);
+    return NextResponse.json({ error: msg || "Something went wrong. Please try again." }, { status: 500 });
   }
 }
