@@ -11,6 +11,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { createOrderAction } from "@/actions/orders";
 import { initiateJazzCashAction, initiateEasyPaisaAction } from "@/actions/payments";
+import { getSavedAddressAction, saveDefaultAddressAction } from "@/actions/profile";
 import { createBrowserClient } from "@supabase/ssr";
 import Image from "next/image";
 
@@ -38,10 +39,30 @@ export default function CheckoutPage() {
     supabase.auth.getUser().then(({ data }) => setIsLoggedIn(!!data.user));
   }, []);
   const [payMethod, setPayMethod] = useState<PayMethod>("jazzcash");
+  const [saveAddress, setSaveAddress] = useState(false);
+  const [hasSavedAddress, setHasSavedAddress] = useState(false);
   const [address, setAddress] = useState({
     full_name: "", phone: "", address_line1: "", address_line2: "",
     city: "", province: "Punjab", postal_code: "",
   });
+
+  // Load saved address on mount
+  useEffect(() => {
+    getSavedAddressAction().then(({ data }) => {
+      if (data) {
+        setAddress({
+          full_name: data.full_name ?? "",
+          phone: data.phone ?? "",
+          address_line1: data.address_line1 ?? "",
+          address_line2: data.address_line2 ?? "",
+          city: data.city ?? "",
+          province: data.province ?? "Punjab",
+          postal_code: data.postal_code ?? "",
+        });
+        setHasSavedAddress(true);
+      }
+    });
+  }, []);
 
   if (items.length === 0 && !orderPlaced) {
     router.replace("/cart");
@@ -79,6 +100,10 @@ export default function CheckoutPage() {
       const { orderId } = result.data;
       setOrderPlaced(true);
       clearCart();
+
+      if (saveAddress) {
+        await saveDefaultAddressAction(address);
+      }
 
       if (payMethod === "jazzcash") {
         const pay = await initiateJazzCashAction(orderId);
@@ -208,6 +233,24 @@ export default function CheckoutPage() {
                       {PROVINCES.map((p) => <option key={p}>{p}</option>)}
                     </select>
                   </div>
+
+                  {/* Save address checkbox */}
+                  {!hasSavedAddress && (
+                    <label className="flex items-center gap-2.5 cursor-pointer mt-1">
+                      <input
+                        type="checkbox"
+                        checked={saveAddress}
+                        onChange={(e) => setSaveAddress(e.target.checked)}
+                        className="w-4 h-4 rounded accent-[#1d1d1f]"
+                      />
+                      <span className="text-sm text-[#6e6e73]">Save this address for future orders</span>
+                    </label>
+                  )}
+                  {hasSavedAddress && (
+                    <p className="text-xs text-[#34c759] flex items-center gap-1.5 mt-1">
+                      <span>✓</span> Address loaded from your saved details
+                    </p>
+                  )}
 
                   <Button type="submit" size="lg" className="w-full mt-2">
                     Continue to Payment

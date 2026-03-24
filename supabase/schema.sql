@@ -34,13 +34,14 @@ create type user_role as enum (
 -- ─── profiles ─────────────────────────────────────────────────
 -- Extends auth.users (one-to-one)
 create table public.profiles (
-  id          uuid primary key references auth.users(id) on delete cascade,
-  full_name   text not null default '',
-  phone       text,
-  role        user_role not null default 'customer',
-  avatar_url  text,
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz not null default now()
+  id              uuid primary key references auth.users(id) on delete cascade,
+  full_name       text not null default '',
+  phone           text,
+  role            user_role not null default 'customer',
+  avatar_url      text,
+  default_address jsonb,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
 );
 
 -- Auto-create profile on signup

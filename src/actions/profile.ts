@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { UpdateProfileSchema } from "@/lib/validations";
-import type { ApiResponse, User } from "@/types";
+import type { ApiResponse, User, ShippingAddress } from "@/types";
 
 export async function updateProfileAction(
   formData: FormData
@@ -55,4 +55,39 @@ export async function getProfileAction(): Promise<ApiResponse<User | null>> {
   }
 
   return { success: true, data: data as User };
+}
+
+export async function getSavedAddressAction(): Promise<ApiResponse<ShippingAddress | null>> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, data: null, error: "Not authenticated" };
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("default_address")
+    .eq("id", user.id)
+    .single();
+
+  if (error) return { success: false, data: null, error: error.message };
+
+  return { success: true, data: (data?.default_address as ShippingAddress) ?? null };
+}
+
+export async function saveDefaultAddressAction(
+  address: ShippingAddress
+): Promise<ApiResponse<null>> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, data: null, error: "Not authenticated" };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ default_address: address })
+    .eq("id", user.id);
+
+  if (error) return { success: false, data: null, error: error.message };
+
+  return { success: true, data: null };
 }

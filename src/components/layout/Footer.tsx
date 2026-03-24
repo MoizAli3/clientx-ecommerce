@@ -69,14 +69,14 @@ export function Footer() {
             <p className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Payment</p>
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-12 h-7 rounded shrink-0 bg-white flex items-center justify-center p-1">
-                  <Image src="/jazzcash.png" alt="JazzCash" width={40} height={24} className="w-full h-full object-contain" />
+                <span className="w-14 h-8 rounded shrink-0 bg-white flex items-center justify-center px-1.5 py-1">
+                  <Image src="/jazzcash.png" alt="JazzCash" width={44} height={24} className="object-contain max-w-full max-h-full" />
                 </span>
                 JazzCash
               </div>
               <div className="flex items-center gap-2 text-sm text-white/50">
-                <span className="w-12 h-7 rounded shrink-0 bg-white flex items-center justify-center p-1">
-                  <Image src="/easypaisa.png" alt="EasyPaisa" width={40} height={24} className="w-full h-full object-contain" />
+                <span className="w-14 h-8 rounded shrink-0 bg-white flex items-center justify-center px-1.5 py-1">
+                  <Image src="/easypaisa.png" alt="EasyPaisa" width={44} height={24} className="object-contain max-w-full max-h-full" />
                 </span>
                 EasyPaisa
               </div>
