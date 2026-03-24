@@ -16,18 +16,27 @@ interface Product {
   stock: number;
 }
 
+interface OrderResult {
+  order_id: string;
+  order_number: string;
+  total_pkr: number;
+  payment_method: string;
+  payment_form_url?: string;
+  payment_payload?: Record<string, string>;
+}
+
 interface Message {
   role: "user" | "assistant";
   text: string;
   products?: Product[];
-  cartActions?: { product: Product; quantity: number }[];
+  orderResult?: OrderResult;
 }
 
 const QUICK_ACTIONS = [
+  "Place an order",
   "Show me luxury watches",
-  "What watches are under PKR 15,000?",
+  "Watches under PKR 15,000?",
   "Track my order",
-  "What payment methods do you accept?",
 ];
 
 export function ChatWidget() {
@@ -35,7 +44,7 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hi! I'm MaxBot 👋 I can help you find the perfect watch, add it to your cart, or track your order. What are you looking for?",
+      text: "Hi! I'm MaxBot 👋 I can help you find the perfect watch, place an order, or track your delivery. What can I do for you?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -43,7 +52,10 @@ export function ChatWidget() {
   const [cartAdded, setCartAdded] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const addItem = useCart((s) => s.addItem);
+  const clearCart = useCart((s) => s.clearCart);
+  const cartItems = useCart((s) => s.items);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,6 +70,21 @@ export function ChatWidget() {
     setCartAdded((prev) => [...prev, product.id]);
   };
 
+  const submitPaymentForm = (formUrl: string, payload: Record<string, string>) => {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = formUrl;
+    Object.entries(payload).forEach(([k, v]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = k;
+      input.value = String(v);
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+  };
+
   const sendMessage = async (text: string) => {
     if (!text.trim() || loading) return;
 
@@ -68,6 +95,14 @@ export function ChatWidget() {
     setLoading(true);
 
     try {
+      // Send cart items so AI knows what's in cart
+      const apiCartItems = cartItems.map((i) => ({
+        product_id: i.product.id,
+        product_name: i.product.name,
+        quantity: i.quantity,
+        price: i.product.sale_price ?? i.product.price,
+      }));
+
       const apiMessages = updated.map((m) => ({
         role: m.role,
         content: m.text,
@@ -76,7 +111,7 @@ export function ChatWidget() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: apiMessages, cartItems: apiCartItems }),
       });
 
       const data = await res.json();
@@ -86,10 +121,22 @@ export function ChatWidget() {
         return;
       }
 
-      // Auto-add to cart if AI triggered add_to_cart tool
+      // Auto-add to cart if AI triggered add_to_cart
       if (data.cartActions?.length) {
         for (const action of data.cartActions) {
           handleAddToCart(action.product as Product, action.quantity);
+        }
+      }
+
+      // Handle order placed
+      if (data.orderResult) {
+        const order = data.orderResult as OrderResult;
+        // Clear cart after successful order
+        clearCart();
+
+        // Redirect to payment for online methods
+        if (order.payment_form_url && order.payment_payload) {
+          setTimeout(() => submitPaymentForm(order.payment_form_url!, order.payment_payload!), 2000);
         }
       }
 
@@ -99,7 +146,7 @@ export function ChatWidget() {
           role: "assistant",
           text: data.message,
           products: data.products?.length ? data.products : undefined,
-          cartActions: data.cartActions,
+          orderResult: data.orderResult ?? undefined,
         },
       ]);
     } catch {
@@ -125,17 +172,25 @@ export function ChatWidget() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
+          <>
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#ff3b30] text-white text-[10px] font-bold flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
+          </>
         )}
       </button>
 
       {/* Chat Panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-24px)] bg-white rounded-3xl shadow-2xl border border-[#e5e5e7] flex flex-col overflow-hidden"
-          style={{ maxHeight: "min(600px, calc(100vh - 120px))" }}>
-
+        <div
+          className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-24px)] bg-white rounded-3xl shadow-2xl border border-[#e5e5e7] flex flex-col overflow-hidden"
+          style={{ maxHeight: "min(620px, calc(100vh - 120px))" }}
+        >
           {/* Header */}
           <div className="bg-[#1d1d1f] px-5 py-4 flex items-center gap-3 shrink-0">
             <div className="w-9 h-9 rounded-full bg-[#c9a84c] flex items-center justify-center shrink-0">
@@ -143,11 +198,16 @@ export function ChatWidget() {
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1">
               <p className="text-white font-semibold text-[15px] leading-none">MaxBot</p>
-              <p className="text-white/50 text-xs mt-0.5">AI Assistant · Always online</p>
+              <p className="text-white/50 text-xs mt-0.5">AI Assistant · Can place orders</p>
             </div>
-            <div className="ml-auto w-2 h-2 rounded-full bg-[#34c759]" />
+            {cartItems.length > 0 && (
+              <span className="text-[11px] font-semibold text-[#c9a84c] bg-[#c9a84c]/10 px-2 py-1 rounded-full">
+                {cartItems.length} in cart
+              </span>
+            )}
+            <div className="w-2 h-2 rounded-full bg-[#34c759] ml-1" />
           </div>
 
           {/* Messages */}
@@ -161,7 +221,7 @@ export function ChatWidget() {
                     </svg>
                   </div>
                 )}
-                <div className={`max-w-[78%] ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col gap-2`}>
+                <div className={`max-w-[80%] flex flex-col gap-2 ${msg.role === "user" ? "items-end" : "items-start"}`}>
                   <div className={`px-3.5 py-2.5 rounded-2xl text-[14px] leading-relaxed whitespace-pre-wrap ${
                     msg.role === "user"
                       ? "bg-[#1d1d1f] text-white rounded-tr-sm"
@@ -169,6 +229,33 @@ export function ChatWidget() {
                   }`}>
                     {msg.text}
                   </div>
+
+                  {/* Order confirmation card */}
+                  {msg.orderResult && (
+                    <div className="bg-[#f0fdf4] border border-[#34c759]/30 rounded-2xl p-3.5 w-full">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="w-6 h-6 rounded-full bg-[#34c759] flex items-center justify-center shrink-0">
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                        <p className="text-[13px] font-bold text-[#1d1d1f]">Order Confirmed!</p>
+                      </div>
+                      <p className="text-[12px] text-[#6e6e73] mb-0.5">Order Number</p>
+                      <p className="text-[15px] font-bold text-[#1d1d1f] font-mono mb-2">{msg.orderResult.order_number}</p>
+                      <p className="text-[12px] text-[#6e6e73]">Total: <span className="font-semibold text-[#1d1d1f]">{formatPKR(msg.orderResult.total_pkr)}</span></p>
+                      {msg.orderResult.payment_method === "cod" && (
+                        <p className="text-[11px] text-[#34c759] font-medium mt-1.5">Pay on delivery — no upfront payment needed</p>
+                      )}
+                      {msg.orderResult.payment_form_url && (
+                        <p className="text-[11px] text-[#c9a84c] font-medium mt-1.5">Redirecting to payment...</p>
+                      )}
+                      <Link href={`/orders/${msg.orderResult.order_id}`}
+                        className="mt-2.5 block text-center text-[12px] font-semibold text-white bg-[#1d1d1f] rounded-full py-1.5 hover:bg-[#3a3a3c] transition-colors">
+                        View Order Details
+                      </Link>
+                    </div>
+                  )}
 
                   {/* Product cards */}
                   {msg.products && msg.products.length > 0 && (
@@ -181,11 +268,9 @@ export function ChatWidget() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-[13px] font-semibold text-[#1d1d1f] leading-snug truncate">{p.name}</p>
+                            <p className="text-[13px] font-semibold text-[#1d1d1f] leading-snug line-clamp-2">{p.name}</p>
                             <div className="flex items-center gap-1.5 mt-0.5">
-                              <span className="text-[13px] font-bold text-[#1d1d1f]">
-                                {formatPKR(p.sale_price ?? p.price)}
-                              </span>
+                              <span className="text-[13px] font-bold text-[#1d1d1f]">{formatPKR(p.sale_price ?? p.price)}</span>
                               {p.sale_price && (
                                 <span className="text-[11px] text-[#aeaeb2] line-through">{formatPKR(p.price)}</span>
                               )}
@@ -237,7 +322,7 @@ export function ChatWidget() {
             <div ref={bottomRef} />
           </div>
 
-          {/* Quick actions (only on first message) */}
+          {/* Quick actions (only initially) */}
           {messages.length === 1 && (
             <div className="px-4 pb-3 flex flex-wrap gap-1.5 shrink-0">
               {QUICK_ACTIONS.map((action) => (
@@ -262,7 +347,7 @@ export function ChatWidget() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask anything..."
+                placeholder={cartItems.length > 0 ? "Say 'place my order' to checkout..." : "Ask anything..."}
                 className="flex-1 bg-transparent text-[14px] text-[#1d1d1f] placeholder:text-[#aeaeb2] outline-none"
                 disabled={loading}
               />
