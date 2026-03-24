@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={geist.variable} data-scroll-behavior="smooth">
       <body suppressHydrationWarning>
         {children}
+        <ChatWidget />
       </body>
     </html>
   );
