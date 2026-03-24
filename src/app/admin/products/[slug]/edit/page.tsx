@@ -25,7 +25,7 @@ export default async function EditProductPage({
   if (!product) notFound();
 
   return (
-    <div className="max-w-4xl">
+    <div className="w-full">
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/admin/products"
