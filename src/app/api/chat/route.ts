@@ -37,23 +37,29 @@ STORE INFO:
 - 1-year warranty on all watches
 - Returns within 7 days (unused, original packaging)
 
-ORDERING FLOW — follow this exact sequence:
-1. Customer wants to order/checkout/place order
-2. Check cart context. If empty → help find products first
-3. Show cart summary with items and total price
-4. Ask for shipping details: full name, phone, address, city, province
-5. Ask for payment method (JazzCash / EasyPaisa / COD)
-6. Repeat order summary for confirmation
-7. Call place_order ONLY after explicit customer confirmation ("haan", "yes", "confirm", "theek hai")
-8. Share order number and delivery info
+GREETINGS & SMALL TALK:
+- If the customer says "hi", "hello", "hey", "salam", "assalam o alaikum", "kya haal hai" or any greeting → ONLY greet back warmly, ask how you can help. Do NOT call any tool, do NOT start ordering flow.
+- If the customer asks a general question → just answer it. No tools needed unless they ask about products/orders.
 
-RULES:
-- Match the customer's language (Urdu/English/Roman Urdu) — don't force them to switch
+ORDERING FLOW — follow this EXACT multi-step sequence. Never skip steps:
+STEP 1: Customer clearly asks to place order / checkout / buy something specific
+STEP 2: Check cart. If empty → help find products first. Show what's in cart.
+STEP 3: Ask for shipping address (full name, phone number, full address, city, province)
+STEP 4: Ask for payment method (JazzCash / EasyPaisa / Cash on Delivery)
+STEP 5: Show complete order summary and ask "Kya main order place kar doon?" / "Shall I place the order?"
+STEP 6: Wait for EXPLICIT confirmation — "haan", "yes", "confirm", "theek hai", "kar do", "place it", "ok"
+STEP 7: Only THEN call place_order tool
+STEP 8: Share order number and next steps
+
+CRITICAL RULES — NEVER BREAK THESE:
+- NEVER call place_order unless you have received explicit confirmation in the LAST customer message
+- NEVER call place_order just because customer is browsing or said "hey" or asked a question
+- NEVER skip straight to place_order without going through all steps
+- NEVER call any tool for greetings, small talk, or general questions
+- Match the customer's language (Urdu/English/Roman Urdu)
 - Never invent products — always call search_products
 - Show prices in PKR always
-- Be warm, helpful, and patient — this is a Pakistani customer
-- Never call place_order without full shipping address and payment method
-- If customer seems confused, guide them step by step`;
+- Be warm, helpful, patient`;
 
 type GroqTool = {
   type: "function";
@@ -168,7 +174,8 @@ type CartItem = { product_id: string; quantity: number };
 async function executeTool(
   name: string,
   input: Record<string, unknown>,
-  cartItems: CartItem[]
+  cartItems: CartItem[],
+  userConfirmed = false
 ) {
   const supabase = await createClient();
 
@@ -235,6 +242,10 @@ async function executeTool(
 
   // ── place_order ────────────────────────────────────────────────────────────
   if (name === "place_order") {
+    // Hard guard: customer must have explicitly confirmed in their last message
+    if (!userConfirmed) {
+      return { error: "Please ask the customer to confirm the order first before placing it. Show them the order summary and ask for confirmation." };
+    }
     const { items: inputItems, shipping_address, payment_method, notes } = input as {
       items: CartItem[];
       shipping_address: Record<string, string>;
@@ -371,6 +382,14 @@ export async function POST(req: NextRequest) {
     const shownProducts: unknown[] = [];
     let orderResult: Record<string, unknown> | null = null;
 
+    // Extract last user message for confirmation guard
+    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
+    const lastUserText = typeof lastUserMsg?.content === "string" ? lastUserMsg.content.toLowerCase() : "";
+
+    // Hard guard — only allow place_order if the last message contains an explicit confirmation
+    const CONFIRMATION_WORDS = ["haan", "yes", "confirm", "theek hai", "kar do", "place it", "ok", "okay", "bilkul", "zaroor", "done", "proceed", "go ahead", "do it", "place order"];
+    const userConfirmed = CONFIRMATION_WORDS.some((w) => lastUserText.includes(w));
+
     // Inject cart context into system message
     const cartContext = cartItems.length
       ? `\n\nCurrent cart: ${JSON.stringify(cartItems.map((i) => ({ product_id: i.product_id, quantity: i.quantity })))}`
@@ -407,7 +426,7 @@ export async function POST(req: NextRequest) {
         let input: Record<string, unknown> = {};
         try { input = JSON.parse(toolCall.function.arguments); } catch { /* ignore */ }
 
-        const result = await executeTool(toolCall.function.name, input, cartItems);
+        const result = await executeTool(toolCall.function.name, input, cartItems, userConfirmed);
 
         if ("products" in result && Array.isArray(result.products)) {
           shownProducts.push(...result.products);

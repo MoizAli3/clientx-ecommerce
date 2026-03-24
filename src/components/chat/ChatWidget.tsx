@@ -32,21 +32,21 @@ interface Message {
   orderResult?: OrderResult;
 }
 
+const INITIAL_MESSAGE: Message = {
+  role: "assistant",
+  text: "Hi! I'm MaxBot 👋 I can help you find the perfect watch, place an order, or track your delivery. What can I do for you?",
+};
+
 const QUICK_ACTIONS = [
-  "Place an order",
   "Show me luxury watches",
   "Watches under PKR 15,000?",
+  "I want to place an order",
   "Track my order",
 ];
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      text: "Hi! I'm MaxBot 👋 I can help you find the perfect watch, place an order, or track your delivery. What can I do for you?",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState<string[]>([]);
@@ -192,7 +192,7 @@ export function ChatWidget() {
           style={{ maxHeight: "min(620px, calc(100vh - 120px))" }}
         >
           {/* Header */}
-          <div className="bg-[#1d1d1f] px-5 py-4 flex items-center gap-3 shrink-0">
+          <div className="bg-[#1d1d1f] px-4 py-4 flex items-center gap-3 shrink-0">
             <div className="w-9 h-9 rounded-full bg-[#c9a84c] flex items-center justify-center shrink-0">
               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
@@ -207,7 +207,17 @@ export function ChatWidget() {
                 {cartItems.length} in cart
               </span>
             )}
-            <div className="w-2 h-2 rounded-full bg-[#34c759] ml-1" />
+            {/* Clear chat */}
+            <button
+              onClick={() => { setMessages([INITIAL_MESSAGE]); setCartAdded([]); }}
+              title="Clear chat"
+              className="w-7 h-7 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors ml-1"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+            <div className="w-2 h-2 rounded-full bg-[#34c759]" />
           </div>
 
           {/* Messages */}
