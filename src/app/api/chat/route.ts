@@ -404,7 +404,7 @@ export async function POST(req: NextRequest) {
 
     for (let i = 0; i < 6; i++) {
       const response = await groq.chat.completions.create({
-        model: "llama-3.1-8b-instant",
+        model: "gemma2-9b-it",
         max_tokens: 1024,
         temperature: 0.6,
         messages: currentMessages,
